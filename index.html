@@ -1,321 +1,131 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎮 Free Game Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Self-Coding AI Loop (Free Plan)</title>
   <style>
-    :root {
-      --bg: #121212;
-      --text: #eee;
-      --card: #1e1e1e;
-      --accent: #0cf;
-    }
-    [data-theme="light"] {
-      --bg: #f4f4f4;
-      --text: #111;
-      --card: #fff;
-      --accent: #007acc;
-    }
-
     body {
+      font-family: sans-serif;
+      background: #0f172a;
+      color: white;
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-
-    header {
-      background: var(--card);
-      padding: 1em;
-      text-align: center;
-      font-size: 2em;
-      color: var(--accent);
-      border-bottom: 2px solid #333;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1em;
-      padding: 1em;
-      justify-content: center;
-      background: var(--card);
-    }
-
-    .controls input,
-    .controls select,
-    .controls button {
-      padding: 0.5em;
-      border-radius: 6px;
-      border: none;
-      font-size: 1em;
-    }
-
-    .controls button {
-      background: var(--accent);
-      color: #000;
-      cursor: pointer;
-    }
-
-    .container {
-      padding: 1em;
-      max-width: 1200px;
-      margin: auto;
+      padding: 0;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1em;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto 1fr;
+      gap: 10px;
+      height: 100vh;
     }
-
-    .game-card {
-      background: var(--card);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s;
-      position: relative;
+    header {
+      grid-column: 1 / -1;
+      background: #1e293b;
+      padding: 10px;
+      text-align: center;
+      font-size: 20px;
     }
-
-    .game-card:hover {
-      transform: scale(1.02);
+    #chatbox, #ai1Output, #ai2Output {
+      background: #1e293b;
+      padding: 10px;
+      overflow-y: auto;
+      border-radius: 8px;
     }
-
-    .game-thumb {
+    #chatbox { grid-column: 1 / -1; height: 200px; }
+    #userInput {
       width: 100%;
-      height: 160px;
-      object-fit: cover;
-    }
-
-    .game-info {
-      padding: 1em;
-      flex-grow: 1;
-    }
-
-    .game-title {
-      font-size: 1.2em;
-      margin: 0 0 0.5em;
-    }
-
-    .game-meta {
-      font-size: 0.9em;
-      color: #aaa;
-      margin-bottom: 1em;
-    }
-
-    .play-button {
-      display: inline-block;
-      padding: 0.5em 1em;
-      background: var(--accent);
-      color: #000;
-      text-align: center;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .favorite-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: transparent;
-      border: none;
-      font-size: 1.5em;
-      color: var(--accent);
-      cursor: pointer;
-    }
-
-    .favorite-btn.favorited {
-      color: red;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 2em;
-      font-size: 1.2em;
-      color: #888;
-    }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-      padding: 1em;
-    }
-
-    .pagination button {
-      padding: 0.5em 1em;
-      background: var(--accent);
-      color: #000;
+      padding: 10px;
+      margin-top: 5px;
       border: none;
       border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
+      font-size: 16px;
     }
-
-    footer {
-      text-align: center;
-      color: #666;
-      padding: 2em;
-      font-size: 0.9em;
+    textarea {
+      width: 100%;
+      height: 100%;
+      background: #0f172a;
+      color: white;
+      border: none;
+      resize: none;
+      font-family: monospace;
     }
   </style>
 </head>
 <body>
-  <header>🎮 Free Game Portal</header>
+  <header>🧠 Free Plan AI Loop (10 req/hr)</header>
 
-  <div class="controls">
-    <input type="text" id="search" placeholder="Search games..." />
-    <select id="genreSelect"><option value="">All Genres</option></select>
-    <select id="platformSelect"><option value="">All Platforms</option></select>
-    <button onclick="getRandomGame()">🎲 Random Game</button>
-    <button onclick="toggleTheme()">🌓 Toggle Theme</button>
+  <div id="ai1Output">
+    <h3>AI 1 Output (Coder)</h3>
+    <textarea readonly id="ai1Code"></textarea>
+  </div>
+  <div id="ai2Output">
+    <h3>AI 2 Output (Improver)</h3>
+    <textarea readonly id="ai2Code"></textarea>
   </div>
 
-  <div id="loading" class="loading">Loading games...</div>
-  <div class="container" id="game-container" style="display: none;"></div>
-  <div class="pagination" id="pagination" style="display:none;"></div>
-
-  <footer>
-    &copy; 2025 Free Game Portal • Powered by <a href="https://www.freetogame.com/" target="_blank" style="color:var(--accent);">FreeToGame API</a>
-  </footer>
+  <div id="chatbox">
+    <h3>AI 3 (Chatmaster)</h3>
+    <div id="chatlog" style="height: 120px; overflow-y: auto;"></div>
+    <input id="userInput" type="text" placeholder="Talk to AI 3 (Try 1 msg/hour)..."/>
+  </div>
 
   <script>
-    const container = document.getElementById('game-container');
-    const loading = document.getElementById('loading');
-    const pagination = document.getElementById('pagination');
-    const searchInput = document.getElementById('search');
-    const genreSelect = document.getElementById('genreSelect');
-    const platformSelect = document.getElementById('platformSelect');
+    const keys = {
+      ai1: '8a4a24dcdd264dd8a1c2f85ec35da172',
+      ai2: '9e657aee7ebb4b98ad72a805ade8f08b',
+      ai3: '1409ae36b53c45ab859bcd1c50ac96ff'
+    };
 
-    let allGames = [];
-    let filteredGames = [];
-    let currentPage = 1;
-    const gamesPerPage = 12;
-    const favorites = new Set(JSON.parse(localStorage.getItem('favorites') || '[]'));
+    const ai1CodeBox = document.getElementById('ai1Code');
+    const ai2CodeBox = document.getElementById('ai2Code');
+    const chatlog = document.getElementById('chatlog');
+    const userInput = document.getElementById('userInput');
 
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme');
-      document.documentElement.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
-    }
+    let lastRequestTime = 0;
+    const cooldownMs = 3600 * 1000 / 10; // 10 requests/hour => 1 every 6 minutes
 
-    function paginate(games) {
-      const totalPages = Math.ceil(games.length / gamesPerPage);
-      pagination.innerHTML = '';
-      if (totalPages <= 1) return pagination.style.display = 'none';
-
-      pagination.style.display = 'flex';
-      for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = i;
-        if (i === currentPage) btn.style.opacity = 0.5;
-        btn.onclick = () => {
-          currentPage = i;
-          renderGames(filteredGames);
-        };
-        pagination.appendChild(btn);
+    async function callAI(message, apiKey) {
+      const now = Date.now();
+      if (now - lastRequestTime < cooldownMs) {
+        return "⏳ Please wait a few minutes before sending another request.";
+      }
+      lastRequestTime = now;
+      try {
+        const res = await fetch('https://api.aimlapi.com/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, key: apiKey })
+        });
+        const data = await res.json();
+        return data.reply || "⚠️ No response received.";
+      } catch (e) {
+        return "🚫 Error: Failed to contact AI.";
       }
     }
 
-    function toggleFavorite(gameId) {
-      if (favorites.has(gameId)) {
-        favorites.delete(gameId);
-      } else {
-        favorites.add(gameId);
+    async function processUserInput(userMsg) {
+      chatlog.innerHTML += `<div><strong>You:</strong> ${userMsg}</div>`;
+
+      const idea = await callAI(userMsg, keys.ai3);
+      chatlog.innerHTML += `<div><strong>AI 3:</strong> ${idea}</div>`;
+
+      const ai1Code = await callAI(idea, keys.ai1);
+      ai1CodeBox.value = ai1Code;
+
+      const ai2Code = await callAI(ai1Code, keys.ai2);
+      ai2CodeBox.value = ai2Code;
+
+      const ai3Review = await callAI(ai2Code, keys.ai3);
+      chatlog.innerHTML += `<div><strong>AI 3 (Review):</strong> ${ai3Review}</div>`;
+      chatlog.scrollTop = chatlog.scrollHeight;
+    }
+
+    userInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        const msg = userInput.value;
+        userInput.value = '';
+        processUserInput(msg);
       }
-      localStorage.setItem('favorites', JSON.stringify([...favorites]));
-      renderGames(filteredGames);
-    }
-
-    function renderGames(games) {
-      container.innerHTML = '';
-      const start = (currentPage - 1) * gamesPerPage;
-      const pageGames = games.slice(start, start + gamesPerPage);
-
-      pageGames.forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
-        const isFav = favorites.has(game.id);
-        card.innerHTML = `
-          <button class="favorite-btn ${isFav ? 'favorited' : ''}" onclick="toggleFavorite(${game.id})">${isFav ? '❤️' : '🤍'}</button>
-          <img class="game-thumb" src="${game.thumbnail}" alt="${game.title}" />
-          <div class="game-info">
-            <h3 class="game-title">${game.title}</h3>
-            <div class="game-meta">${game.genre} | ${game.platform}</div>
-            <a class="play-button" href="${game.game_url}" target="_blank">Play Now</a>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      paginate(games);
-    }
-
-    function applyFilters() {
-      const searchText = searchInput.value.toLowerCase();
-      const genre = genreSelect.value;
-      const platform = platformSelect.value;
-
-      filteredGames = allGames.filter(game =>
-        game.title.toLowerCase().includes(searchText) &&
-        (genre === "" || game.genre === genre) &&
-        (platform === "" || game.platform === platform)
-      );
-
-      currentPage = 1;
-      renderGames(filteredGames);
-    }
-
-    searchInput.addEventListener('input', applyFilters);
-    genreSelect.addEventListener('change', applyFilters);
-    platformSelect.addEventListener('change', applyFilters);
-
-    function getRandomGame() {
-      if (filteredGames.length > 0) {
-        const game = filteredGames[Math.floor(Math.random() * filteredGames.length)];
-        window.open(game.game_url, '_blank');
-      }
-    }
-
-    fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.freetogame.com/api/games'))
-      .then(res => res.json())
-      .then(data => {
-        const gameData = JSON.parse(data.contents);
-        loading.style.display = 'none';
-        container.style.display = 'grid';
-
-        allGames = gameData;
-        filteredGames = gameData;
-
-        const genres = new Set();
-        const platforms = new Set();
-        gameData.forEach(g => {
-          genres.add(g.genre);
-          platforms.add(g.platform);
-        });
-
-        [...genres].sort().forEach(genre => {
-          const opt = document.createElement('option');
-          opt.value = genre;
-          opt.textContent = genre;
-          genreSelect.appendChild(opt);
-        });
-
-        [...platforms].sort().forEach(plat => {
-          const opt = document.createElement('option');
-          opt.value = plat;
-          opt.textContent = plat;
-          platformSelect.appendChild(opt);
-        });
-
-        renderGames(filteredGames);
-      })
-      .catch(err => {
-        loading.textContent = 'Failed to load games. Please try again later.';
-        console.error(err);
-      });
+    });
   </script>
 </body>
 </html>
