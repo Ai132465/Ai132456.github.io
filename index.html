@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Game Portal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+    }
+    header {
+      background: #222;
+      padding: 1em;
+      text-align: center;
+      font-size: 1.5em;
+      border-bottom: 2px solid #444;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin: 1em 0;
+    }
+    nav a {
+      color: #0cf;
+      text-decoration: none;
+      padding: 0.5em 1em;
+      border: 1px solid #0cf;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+    nav a:hover {
+      background: #0cf;
+      color: #000;
+    }
+    .game-container {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 1em;
+    }
+    .game-container.active {
+      display: flex;
+    }
+    iframe, embed {
+      max-width: 100%;
+      border: none;
+    }
+    footer {
+      text-align: center;
+      padding: 1em;
+      color: #666;
+      background: #222;
+      margin-top: 2em;
+    }
+  </style>
+</head>
+<body>
+  <header>🎮 My Game Portal</header>
+  <nav>
+    <a href="#" onclick="showGame('kongregate')">Flash Game</a>
+    <a href="#" onclick="showGame('addicting1')">Addicting Game 1</a>
+    <a href="#" onclick="showGame('addicting2')">Addicting Game 2</a>
+  </nav>
+
+  <div id="kongregate" class="game-container active">
+    <h2>Kongregate Flash Game</h2>
+    <embed width="800" height="600" base="https://external.kongregate-games.com/gamez/0019/2194/live/" src="https://external.kongregate-games.com/gamez/0019/2194/live/embeddable_192194.swf" type="application/x-shockwave-flash"></embed>
+    <p style="margin-top: 1em;">Play free games at <a href="https://www.kongregate.com/" target="_blank">Kongregate</a></p>
+  </div>
+
+  <div id="addicting1" class="game-container">
+    <h2>Addicting Games - Game 1</h2>
+    <iframe width="800" height="600" src="https://www.addictinggames.com/embed/html5-games/20398" scrolling="no"></iframe>
+  </div>
+
+  <div id="addicting2" class="game-container">
+    <h2>Addicting Games - Game 2</h2>
+    <iframe width="800" height="600" src="https://www.addictinggames.com/embed/html5-games/20543" scrolling="no"></iframe>
+  </div>
+
+  <footer>
+    &copy; 2025 My Game Portal. All games are property of their respective creators.
+  </footer>
+
+  <script>
+    function showGame(id) {
+      document.querySelectorAll('.game-container').forEach(div => {
+        div.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+</body>
+</html>
