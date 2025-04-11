@@ -3,97 +3,288 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Game Portal</title>
+  <title>Free Game Portal</title>
   <style>
+    :root {
+      --bg: #121212;
+      --text: #eee;
+      --card: #1e1e1e;
+      --accent: #0cf;
+    }
+    [data-theme="light"] {
+      --bg: #f4f4f4;
+      --text: #111;
+      --card: #fff;
+      --accent: #007acc;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
     }
+
     header {
-      background: #222;
+      background: var(--card);
       padding: 1em;
       text-align: center;
-      font-size: 1.5em;
-      border-bottom: 2px solid #444;
+      font-size: 2em;
+      color: var(--accent);
+      border-bottom: 2px solid #333;
     }
-    nav {
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1em;
+      padding: 1em;
+      justify-content: center;
+      background: var(--card);
+    }
+
+    .controls input,
+    .controls select,
+    .controls button {
+      padding: 0.5em;
+      border-radius: 6px;
+      border: none;
+      font-size: 1em;
+    }
+
+    .controls button {
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .container {
+      padding: 1em;
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1em;
+    }
+
+    .game-card {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s;
+    }
+
+    .game-card:hover {
+      transform: scale(1.02);
+    }
+
+    .game-thumb {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .game-info {
+      padding: 1em;
+      flex-grow: 1;
+    }
+
+    .game-title {
+      font-size: 1.2em;
+      margin: 0 0 0.5em;
+      color: var(--text);
+    }
+
+    .game-meta {
+      font-size: 0.9em;
+      color: #aaa;
+      margin-bottom: 1em;
+    }
+
+    .play-button {
+      display: inline-block;
+      padding: 0.5em 1em;
+      background: var(--accent);
+      color: #000;
+      text-align: center;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2em;
+      font-size: 1.2em;
+      color: #888;
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      padding: 2em;
+      font-size: 0.9em;
+    }
+
+    .pagination {
       display: flex;
       justify-content: center;
       gap: 1em;
-      margin: 1em 0;
+      padding: 1em;
     }
-    nav a {
-      color: #0cf;
-      text-decoration: none;
+
+    .pagination button {
       padding: 0.5em 1em;
-      border: 1px solid #0cf;
-      border-radius: 8px;
-      transition: 0.2s;
-    }
-    nav a:hover {
-      background: #0cf;
+      background: var(--accent);
       color: #000;
-    }
-    .game-container {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      padding: 1em;
-    }
-    .game-container.active {
-      display: flex;
-    }
-    iframe, embed {
-      max-width: 100%;
       border: none;
-    }
-    footer {
-      text-align: center;
-      padding: 1em;
-      color: #666;
-      background: #222;
-      margin-top: 2em;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
     }
   </style>
 </head>
-<body>
-  <header>🎮 My Game Portal</header>
-  <nav>
-    <a href="#" onclick="showGame('kongregate')">Flash Game</a>
-    <a href="#" onclick="showGame('addicting1')">Addicting Game 1</a>
-    <a href="#" onclick="showGame('addicting2')">Addicting Game 2</a>
-  </nav>
+<body data-theme="dark">
+  <header>🎮 Free Game Portal</header>
 
-  <div id="kongregate" class="game-container active">
-    <h2>Kongregate Flash Game</h2>
-    <embed width="800" height="600" base="https://external.kongregate-games.com/gamez/0019/2194/live/" src="https://external.kongregate-games.com/gamez/0019/2194/live/embeddable_192194.swf" type="application/x-shockwave-flash"></embed>
-    <p style="margin-top: 1em;">Play free games at <a href="https://www.kongregate.com/" target="_blank">Kongregate</a></p>
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search games..." />
+    <select id="genreSelect">
+      <option value="">All Genres</option>
+    </select>
+    <select id="platformSelect">
+      <option value="">All Platforms</option>
+    </select>
+    <button onclick="toggleTheme()">🌓 Toggle Theme</button>
   </div>
 
-  <div id="addicting1" class="game-container">
-    <h2>Addicting Games - Game 1</h2>
-    <iframe width="800" height="600" src="https://www.addictinggames.com/embed/html5-games/20398" scrolling="no"></iframe>
-  </div>
+  <div id="loading" class="loading">Loading games...</div>
+  <div class="container" id="game-container" style="display: none;"></div>
 
-  <div id="addicting2" class="game-container">
-    <h2>Addicting Games - Game 2</h2>
-    <iframe width="800" height="600" src="https://www.addictinggames.com/embed/html5-games/20543" scrolling="no"></iframe>
-  </div>
+  <div class="pagination" id="pagination" style="display:none;"></div>
 
   <footer>
-    &copy; 2025 My Game Portal. All games are property of their respective creators.
+    &copy; 2025 Free Game Portal. Powered by <a href="https://www.freetogame.com/" target="_blank" style="color:var(--accent);">FreeToGame API</a>
   </footer>
 
   <script>
-    function showGame(id) {
-      document.querySelectorAll('.game-container').forEach(div => {
-        div.classList.remove('active');
-      });
-      document.getElementById(id).classList.add('active');
+    const container = document.getElementById('game-container');
+    const loading = document.getElementById('loading');
+    const pagination = document.getElementById('pagination');
+    const searchInput = document.getElementById('search');
+    const genreSelect = document.getElementById('genreSelect');
+    const platformSelect = document.getElementById('platformSelect');
+
+    let allGames = [];
+    let filteredGames = [];
+    let currentPage = 1;
+    const gamesPerPage = 12;
+
+    function toggleTheme() {
+      const current = document.body.getAttribute('data-theme');
+      document.body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
     }
+
+    function paginate(games) {
+      const totalPages = Math.ceil(games.length / gamesPerPage);
+      pagination.innerHTML = '';
+      if (totalPages <= 1) return pagination.style.display = 'none';
+
+      pagination.style.display = 'flex';
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if (i === currentPage) btn.style.opacity = 0.5;
+        btn.onclick = () => {
+          currentPage = i;
+          renderGames(filteredGames);
+        };
+        pagination.appendChild(btn);
+      }
+    }
+
+    function renderGames(games) {
+      container.innerHTML = '';
+      const start = (currentPage - 1) * gamesPerPage;
+      const pageGames = games.slice(start, start + gamesPerPage);
+
+      pageGames.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.innerHTML = `
+          <img class="game-thumb" src="${game.thumbnail}" alt="${game.title}" />
+          <div class="game-info">
+            <h3 class="game-title">${game.title}</h3>
+            <div class="game-meta">${game.genre} | ${game.platform}</div>
+            <a class="play-button" href="${game.game_url}" target="_blank">Play Now</a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      paginate(games);
+    }
+
+    function applyFilters() {
+      const searchText = searchInput.value.toLowerCase();
+      const genre = genreSelect.value;
+      const platform = platformSelect.value;
+
+      filteredGames = allGames.filter(game =>
+        game.title.toLowerCase().includes(searchText) &&
+        (genre === "" || game.genre === genre) &&
+        (platform === "" || game.platform === platform)
+      );
+
+      currentPage = 1;
+      renderGames(filteredGames);
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+    genreSelect.addEventListener('change', applyFilters);
+    platformSelect.addEventListener('change', applyFilters);
+
+    fetch('https://corsproxy.io/?https://www.freetogame.com/api/games')
+      .then(res => res.json())
+      .then(data => {
+        loading.style.display = 'none';
+        container.style.display = 'grid';
+
+        allGames = data;
+        filteredGames = data;
+
+        // Populate filters
+        const genres = new Set();
+        const platforms = new Set();
+        data.forEach(g => {
+          genres.add(g.genre);
+          platforms.add(g.platform);
+        });
+
+        [...genres].sort().forEach(genre => {
+          const opt = document.createElement('option');
+          opt.value = genre;
+          opt.textContent = genre;
+          genreSelect.appendChild(opt);
+        });
+
+        [...platforms].sort().forEach(plat => {
+          const opt = document.createElement('option');
+          opt.value = plat;
+          opt.textContent = plat;
+          platformSelect.appendChild(opt);
+        });
+
+        renderGames(filteredGames);
+      })
+      .catch(err => {
+        loading.textContent = 'Failed to load games. Please try again later.';
+        console.error(err);
+      });
   </script>
 </body>
 </html>
