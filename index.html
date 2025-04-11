@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Free Game Portal</title>
+  <title>🎮 Free Game Portal</title>
   <style>
     :root {
       --bg: #121212;
@@ -55,7 +55,7 @@
 
     .controls button {
       background: var(--accent);
-      color: #fff;
+      color: #000;
       cursor: pointer;
     }
 
@@ -76,6 +76,7 @@
       display: flex;
       flex-direction: column;
       transition: transform 0.2s;
+      position: relative;
     }
 
     .game-card:hover {
@@ -96,7 +97,6 @@
     .game-title {
       font-size: 1.2em;
       margin: 0 0 0.5em;
-      color: var(--text);
     }
 
     .game-meta {
@@ -116,18 +116,26 @@
       font-weight: bold;
     }
 
+    .favorite-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 1.5em;
+      color: var(--accent);
+      cursor: pointer;
+    }
+
+    .favorite-btn.favorited {
+      color: red;
+    }
+
     .loading {
       text-align: center;
       padding: 2em;
       font-size: 1.2em;
       color: #888;
-    }
-
-    footer {
-      text-align: center;
-      color: #666;
-      padding: 2em;
-      font-size: 0.9em;
     }
 
     .pagination {
@@ -146,29 +154,32 @@
       cursor: pointer;
       font-weight: bold;
     }
+
+    footer {
+      text-align: center;
+      color: #666;
+      padding: 2em;
+      font-size: 0.9em;
+    }
   </style>
 </head>
-<body data-theme="dark">
+<body>
   <header>🎮 Free Game Portal</header>
 
   <div class="controls">
     <input type="text" id="search" placeholder="Search games..." />
-    <select id="genreSelect">
-      <option value="">All Genres</option>
-    </select>
-    <select id="platformSelect">
-      <option value="">All Platforms</option>
-    </select>
+    <select id="genreSelect"><option value="">All Genres</option></select>
+    <select id="platformSelect"><option value="">All Platforms</option></select>
+    <button onclick="getRandomGame()">🎲 Random Game</button>
     <button onclick="toggleTheme()">🌓 Toggle Theme</button>
   </div>
 
   <div id="loading" class="loading">Loading games...</div>
   <div class="container" id="game-container" style="display: none;"></div>
-
   <div class="pagination" id="pagination" style="display:none;"></div>
 
   <footer>
-    &copy; 2025 Free Game Portal. Powered by <a href="https://www.freetogame.com/" target="_blank" style="color:var(--accent);">FreeToGame API</a>
+    &copy; 2025 Free Game Portal • Powered by <a href="https://www.freetogame.com/" target="_blank" style="color:var(--accent);">FreeToGame API</a>
   </footer>
 
   <script>
@@ -183,10 +194,11 @@
     let filteredGames = [];
     let currentPage = 1;
     const gamesPerPage = 12;
+    const favorites = new Set(JSON.parse(localStorage.getItem('favorites') || '[]'));
 
     function toggleTheme() {
-      const current = document.body.getAttribute('data-theme');
-      document.body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+      const current = document.documentElement.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
     }
 
     function paginate(games) {
@@ -207,6 +219,16 @@
       }
     }
 
+    function toggleFavorite(gameId) {
+      if (favorites.has(gameId)) {
+        favorites.delete(gameId);
+      } else {
+        favorites.add(gameId);
+      }
+      localStorage.setItem('favorites', JSON.stringify([...favorites]));
+      renderGames(filteredGames);
+    }
+
     function renderGames(games) {
       container.innerHTML = '';
       const start = (currentPage - 1) * gamesPerPage;
@@ -215,7 +237,9 @@
       pageGames.forEach(game => {
         const card = document.createElement('div');
         card.className = 'game-card';
+        const isFav = favorites.has(game.id);
         card.innerHTML = `
+          <button class="favorite-btn ${isFav ? 'favorited' : ''}" onclick="toggleFavorite(${game.id})">${isFav ? '❤️' : '🤍'}</button>
           <img class="game-thumb" src="${game.thumbnail}" alt="${game.title}" />
           <div class="game-info">
             <h3 class="game-title">${game.title}</h3>
@@ -248,19 +272,26 @@
     genreSelect.addEventListener('change', applyFilters);
     platformSelect.addEventListener('change', applyFilters);
 
-    fetch('https://corsproxy.io/?https://www.freetogame.com/api/games')
+    function getRandomGame() {
+      if (filteredGames.length > 0) {
+        const game = filteredGames[Math.floor(Math.random() * filteredGames.length)];
+        window.open(game.game_url, '_blank');
+      }
+    }
+
+    fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.freetogame.com/api/games'))
       .then(res => res.json())
       .then(data => {
+        const gameData = JSON.parse(data.contents);
         loading.style.display = 'none';
         container.style.display = 'grid';
 
-        allGames = data;
-        filteredGames = data;
+        allGames = gameData;
+        filteredGames = gameData;
 
-        // Populate filters
         const genres = new Set();
         const platforms = new Set();
-        data.forEach(g => {
+        gameData.forEach(g => {
           genres.add(g.genre);
           platforms.add(g.platform);
         });
