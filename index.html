@@ -3,129 +3,169 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Self-Coding AI Loop (Free Plan)</title>
+  <title>Coding & AI Labs</n>
   <style>
+    /* Holy Grail Layout using CSS Grid */
     body {
-      font-family: sans-serif;
-      background: #0f172a;
-      color: white;
       margin: 0;
-      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto 1fr;
-      gap: 10px;
-      height: 100vh;
+      grid-template-areas:
+        "header header header"
+        "nav main aside"
+        "footer footer footer";
+      grid-template-columns: 1fr 3fr 1fr;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
     }
     header {
-      grid-column: 1 / -1;
-      background: #1e293b;
-      padding: 10px;
+      grid-area: header;
+      background: #004080;
+      color: white;
+      padding: 1rem;
       text-align: center;
-      font-size: 20px;
     }
-    #chatbox, #ai1Output, #ai2Output {
-      background: #1e293b;
-      padding: 10px;
-      overflow-y: auto;
-      border-radius: 8px;
+    nav {
+      grid-area: nav;
+      background: #f0f0f0;
+      padding: 1rem;
     }
-    #chatbox { grid-column: 1 / -1; height: 200px; }
-    #userInput {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
+    nav ul {
+      list-style: none;
+      padding: 0;
     }
-    textarea {
-      width: 100%;
-      height: 100%;
-      background: #0f172a;
+    nav li {
+      margin: 0.5rem 0;
+    }
+    main {
+      grid-area: main;
+      padding: 1rem;
+    }
+    aside {
+      grid-area: aside;
+      background: #f9f9f9;
+      padding: 1rem;
+    }
+    footer {
+      grid-area: footer;
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 0.5rem;
+    }
+    .listings {
+      margin-bottom: 2rem;
+    }
+    .listings h2,
+    .appointments h2,
+    .banner h2 {
+      color: #004080;
+      margin-top: 0;
+    }
+    .service-item {
+      margin-bottom: 1rem;
+    }
+    .appointments form {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+    }
+    .appointments label {
+      margin: 0.5rem 0 0.2rem;
+    }
+    .appointments input,
+    .appointments textarea {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .appointments button {
+      padding: 0.7rem;
+      font-size: 1rem;
+      background: #004080;
       color: white;
       border: none;
-      resize: none;
-      font-family: monospace;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .appointments button:hover {
+      background: #003060;
+    }
+    .banner img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
-  <header>🧠 Free Plan AI Loop (10 req/hr)</header>
+  <div class="container">
+    <header>
+      <h1>Coding & AI Labs</h1>
+      <p>Your partner in innovative software design</p>
+    </header>
+    <nav>
+      <ul>
+        <li><a href="#listings">Our Services</a></li>
+        <li><a href="#appointments">Book Appointment</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </nav>
+    <main>
+      <section id="listings" class="listings">
+        <h2>Our Services</h2>
+        <div class="service-item">
+          <h3>Custom Software Development</h3>
+          <p>Tailored solutions for web, mobile, and desktop applications.</p>
+        </div>
+        <div class="service-item">
+          <h3>AI & Machine Learning</h3>
+          <p>Intelligent systems and predictive models to drive insights.</p>
+        </div>
+        <div class="service-item">
+          <h3>UI/UX Design</h3>
+          <p>User-centered interfaces and engaging user experiences.</p>
+        </div>
+        <div class="service-item">
+          <h3>Consulting & Strategy</h3>
+          <p>Technical advising and roadmap planning for your projects.</p>
+        </div>
+      </section>
+      <section id="appointments" class="appointments">
+        <h2>Book an Appointment</h2>
+        <form action="mailto:coding.and.ai.labs@gmail.com" method="post" enctype="text/plain">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="Name" required />
 
-  <div id="ai1Output">
-    <h3>AI 1 Output (Coder)</h3>
-    <textarea readonly id="ai1Code"></textarea>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="Email" required />
+
+          <label for="datetime">Preferred Date & Time:</label>
+          <input type="datetime-local" id="datetime" name="Preferred Date & Time" required />
+
+          <label for="message">Message:</label>
+          <textarea id="message" name="Message" rows="4"></textarea>
+
+          <button type="submit">Submit</button>
+        </form>
+      </section>
+    </main>
+    <aside>
+      <section class="banner">
+        <h2>Sponsored Ads</h2>
+        <!-- Example banner ad placeholders -->
+        <img src="https://via.placeholder.com/300x250?text=Ad+Banner+1" alt="Ad Banner 1" />
+        <img src="https://via.placeholder.com/300x250?text=Ad+Banner+2" alt="Ad Banner 2" />
+      </section>
+    </aside>
+    <footer>
+      <p>&copy; 2025 Coding & AI Labs. All rights reserved.</p>
+      <p><a href="mailto:coding.and.ai.labs@gmail.com" style="color: #ccc; text-decoration: none;">coding.and.ai.labs@gmail.com</a></p>
+    </footer>
   </div>
-  <div id="ai2Output">
-    <h3>AI 2 Output (Improver)</h3>
-    <textarea readonly id="ai2Code"></textarea>
-  </div>
-
-  <div id="chatbox">
-    <h3>AI 3 (Chatmaster)</h3>
-    <div id="chatlog" style="height: 120px; overflow-y: auto;"></div>
-    <input id="userInput" type="text" placeholder="Talk to AI 3 (Try 1 msg/hour)..."/>
-  </div>
-
-  <script>
-    const keys = {
-      ai1: '8a4a24dcdd264dd8a1c2f85ec35da172',
-      ai2: '9e657aee7ebb4b98ad72a805ade8f08b',
-      ai3: '1409ae36b53c45ab859bcd1c50ac96ff'
-    };
-
-    const ai1CodeBox = document.getElementById('ai1Code');
-    const ai2CodeBox = document.getElementById('ai2Code');
-    const chatlog = document.getElementById('chatlog');
-    const userInput = document.getElementById('userInput');
-
-    let lastRequestTime = 0;
-    const cooldownMs = 3600 * 1000 / 10; // 10 requests/hour => 1 every 6 minutes
-
-    async function callAI(message, apiKey) {
-      const now = Date.now();
-      if (now - lastRequestTime < cooldownMs) {
-        return "⏳ Please wait a few minutes before sending another request.";
-      }
-      lastRequestTime = now;
-      try {
-        const res = await fetch('https://api.aimlapi.com/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message, key: apiKey })
-        });
-        const data = await res.json();
-        return data.reply || "⚠️ No response received.";
-      } catch (e) {
-        return "🚫 Error: Failed to contact AI.";
-      }
-    }
-
-    async function processUserInput(userMsg) {
-      chatlog.innerHTML += `<div><strong>You:</strong> ${userMsg}</div>`;
-
-      const idea = await callAI(userMsg, keys.ai3);
-      chatlog.innerHTML += `<div><strong>AI 3:</strong> ${idea}</div>`;
-
-      const ai1Code = await callAI(idea, keys.ai1);
-      ai1CodeBox.value = ai1Code;
-
-      const ai2Code = await callAI(ai1Code, keys.ai2);
-      ai2CodeBox.value = ai2Code;
-
-      const ai3Review = await callAI(ai2Code, keys.ai3);
-      chatlog.innerHTML += `<div><strong>AI 3 (Review):</strong> ${ai3Review}</div>`;
-      chatlog.scrollTop = chatlog.scrollHeight;
-    }
-
-    userInput.addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        const msg = userInput.value;
-        userInput.value = '';
-        processUserInput(msg);
-      }
-    });
-  </script>
 </body>
 </html>
