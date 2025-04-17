@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coding & AI Labs</n>
+  <title>Coding & AI Labs</title>
   <style>
-    /* Holy Grail Layout using CSS Grid */
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f9ff;
+      color: #333;
     }
     .container {
       display: grid;
@@ -22,14 +23,14 @@
     }
     header {
       grid-area: header;
-      background: #004080;
+      background: linear-gradient(to right, #003366, #0059b3);
       color: white;
-      padding: 1rem;
+      padding: 1.5rem;
       text-align: center;
     }
     nav {
       grid-area: nav;
-      background: #f0f0f0;
+      background: #cce0ff;
       padding: 1rem;
     }
     nav ul {
@@ -39,38 +40,52 @@
     nav li {
       margin: 0.5rem 0;
     }
+    nav a {
+      color: #003366;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
     main {
       grid-area: main;
-      padding: 1rem;
+      padding: 2rem;
+      background-color: #ffffff;
     }
     aside {
       grid-area: aside;
-      background: #f9f9f9;
+      background: #e6f0ff;
       padding: 1rem;
     }
     footer {
       grid-area: footer;
-      background: #222;
+      background: #003366;
       color: white;
       text-align: center;
-      padding: 0.5rem;
-    }
-    .listings {
-      margin-bottom: 2rem;
+      padding: 0.75rem;
     }
     .listings h2,
     .appointments h2,
     .banner h2 {
-      color: #004080;
+      color: #0059b3;
       margin-top: 0;
     }
     .service-item {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background-color: #e6f2ff;
+      border-left: 5px solid #0059b3;
+      border-radius: 5px;
     }
     .appointments form {
       display: flex;
       flex-direction: column;
-      max-width: 400px;
+      max-width: 500px;
+      background-color: #f0f7ff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid #aaccee;
     }
     .appointments label {
       margin: 0.5rem 0 0.2rem;
@@ -80,25 +95,33 @@
       padding: 0.5rem;
       font-size: 1rem;
       margin-bottom: 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid #aaccee;
       border-radius: 4px;
     }
     .appointments button {
       padding: 0.7rem;
       font-size: 1rem;
-      background: #004080;
+      background: #0059b3;
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
     .appointments button:hover {
-      background: #003060;
+      background: #004080;
     }
     .banner img {
       width: 100%;
       height: auto;
       margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #aaccee;
+    }
+    a {
+      color: #aad4ff;
+    }
+    a:hover {
+      color: #ffffff;
     }
   </style>
 </head>
@@ -157,14 +180,13 @@
     <aside>
       <section class="banner">
         <h2>Sponsored Ads</h2>
-        <!-- Example banner ad placeholders -->
         <img src="https://via.placeholder.com/300x250?text=Ad+Banner+1" alt="Ad Banner 1" />
         <img src="https://via.placeholder.com/300x250?text=Ad+Banner+2" alt="Ad Banner 2" />
       </section>
     </aside>
     <footer>
       <p>&copy; 2025 Coding & AI Labs. All rights reserved.</p>
-      <p><a href="mailto:coding.and.ai.labs@gmail.com" style="color: #ccc; text-decoration: none;">coding.and.ai.labs@gmail.com</a></p>
+      <p><a href="mailto:coding.and.ai.labs@gmail.com">coding.and.ai.labs@gmail.com</a></p>
     </footer>
   </div>
 </body>
