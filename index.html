@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coding & AI Labs</title>
+  <title>Game Portal - Coding & AI Labs</title>
   <style>
     body {
       margin: 0;
@@ -65,49 +65,39 @@
       text-align: center;
       padding: 0.75rem;
     }
-    .listings h2,
-    .appointments h2,
+    .games h2,
+    .giveaways h2,
     .banner h2 {
       color: #0059b3;
       margin-top: 0;
     }
-    .service-item {
-      margin-bottom: 1.5rem;
+    .game-list, .giveaway-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    .game-item, .giveaway-item {
+      background: #e6f2ff;
       padding: 1rem;
-      background-color: #e6f2ff;
-      border-left: 5px solid #0059b3;
       border-radius: 5px;
+      border-left: 5px solid #0059b3;
     }
-    .appointments form {
-      display: flex;
-      flex-direction: column;
-      max-width: 500px;
-      background-color: #f0f7ff;
-      padding: 1.5rem;
-      border-radius: 8px;
-      border: 1px solid #aaccee;
+    .game-item h3, .giveaway-item h3 {
+      margin: 0.5rem 0;
     }
-    .appointments label {
-      margin: 0.5rem 0 0.2rem;
+    .game-item p, .giveaway-item p {
+      font-size: 0.9rem;
     }
-    .appointments input,
-    .appointments textarea {
-      padding: 0.5rem;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      border: 1px solid #aaccee;
-      border-radius: 4px;
-    }
-    .appointments button {
-      padding: 0.7rem;
-      font-size: 1rem;
+    .game-item a, .giveaway-item a {
+      display: inline-block;
+      margin-top: 0.5rem;
       background: #0059b3;
       color: white;
-      border: none;
+      padding: 0.4rem 0.8rem;
       border-radius: 4px;
-      cursor: pointer;
+      text-decoration: none;
     }
-    .appointments button:hover {
+    .game-item a:hover, .giveaway-item a:hover {
       background: #004080;
     }
     .banner img {
@@ -117,65 +107,38 @@
       border-radius: 8px;
       border: 1px solid #aaccee;
     }
-    a {
-      color: #aad4ff;
-    }
-    a:hover {
-      color: #ffffff;
+    #iframeViewer {
+      width: 100%;
+      height: 600px;
+      border: 2px solid #0059b3;
+      margin-top: 2rem;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Coding & AI Labs</h1>
-      <p>Your partner in innovative software design</p>
+      <h1>Game Portal</h1>
+      <p>Explore Free Games and Giveaways</p>
     </header>
     <nav>
       <ul>
-        <li><a href="#listings">Our Services</a></li>
-        <li><a href="#appointments">Book Appointment</a></li>
-        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="#games">Games</a></li>
+        <li><a href="#giveaways">Giveaways</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
     <main>
-      <section id="listings" class="listings">
-        <h2>Our Services</h2>
-        <div class="service-item">
-          <h3>Custom Software Development</h3>
-          <p>Tailored solutions for web, mobile, and desktop applications.</p>
-        </div>
-        <div class="service-item">
-          <h3>AI & Machine Learning</h3>
-          <p>Intelligent systems and predictive models to drive insights.</p>
-        </div>
-        <div class="service-item">
-          <h3>UI/UX Design</h3>
-          <p>User-centered interfaces and engaging user experiences.</p>
-        </div>
-        <div class="service-item">
-          <h3>Consulting & Strategy</h3>
-          <p>Technical advising and roadmap planning for your projects.</p>
-        </div>
+      <section id="games" class="games">
+        <h2>Latest Free Games</h2>
+        <div class="game-list" id="gameList"></div>
       </section>
-      <section id="appointments" class="appointments">
-        <h2>Book an Appointment</h2>
-        <form action="mailto:coding.and.ai.labs@gmail.com" method="post" enctype="text/plain">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="Name" required />
-
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="Email" required />
-
-          <label for="datetime">Preferred Date & Time:</label>
-          <input type="datetime-local" id="datetime" name="Preferred Date & Time" required />
-
-          <label for="message">Message:</label>
-          <textarea id="message" name="Message" rows="4"></textarea>
-
-          <button type="submit">Submit</button>
-        </form>
+      <section id="giveaways" class="giveaways">
+        <h2>Current Giveaways</h2>
+        <div class="giveaway-list" id="giveawayList"></div>
       </section>
+      <iframe id="iframeViewer" src="about:blank"></iframe>
     </main>
     <aside>
       <section class="banner">
@@ -189,5 +152,63 @@
       <p><a href="mailto:coding.and.ai.labs@gmail.com">coding.and.ai.labs@gmail.com</a></p>
     </footer>
   </div>
+  <script>
+    const iframe = document.getElementById('iframeViewer');
+
+    async function loadGames() {
+      try {
+        const res = await fetch('https://www.freetogame.com/api/games');
+        const games = await res.json();
+        const gameList = document.getElementById('gameList');
+
+        games.slice(0, 12).forEach(game => {
+          const gameEl = document.createElement('div');
+          gameEl.className = 'game-item';
+          gameEl.innerHTML = `
+            <h3>${game.title}</h3>
+            <img src="${game.thumbnail}" alt="${game.title}" style="width: 100%; border-radius: 5px;" />
+            <p>${game.short_description}</p>
+            <a href="#" data-url="${game.game_url}">Play Now</a>
+          `;
+          gameEl.querySelector('a').addEventListener('click', e => {
+            e.preventDefault();
+            iframe.src = e.target.dataset.url;
+          });
+          gameList.appendChild(gameEl);
+        });
+      } catch (err) {
+        console.error('Failed to load games:', err);
+      }
+    }
+
+    async function loadGiveaways() {
+      try {
+        const res = await fetch('https://gamerpower.com/api/giveaways');
+        const giveaways = await res.json();
+        const giveawayList = document.getElementById('giveawayList');
+
+        giveaways.slice(0, 12).forEach(giveaway => {
+          const div = document.createElement('div');
+          div.className = 'giveaway-item';
+          div.innerHTML = `
+            <h3>${giveaway.title}</h3>
+            <p>${giveaway.description}</p>
+            <p><strong>Platform:</strong> ${giveaway.platforms}</p>
+            <a href="#" data-url="${giveaway.open_giveaway_url}">Claim Giveaway</a>
+          `;
+          div.querySelector('a').addEventListener('click', e => {
+            e.preventDefault();
+            iframe.src = e.target.dataset.url;
+          });
+          giveawayList.appendChild(div);
+        });
+      } catch (err) {
+        console.error('Failed to load giveaways:', err);
+      }
+    }
+
+    loadGames();
+    loadGiveaways();
+  </script>
 </body>
 </html>
