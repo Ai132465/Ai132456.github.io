@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hidden Static Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="gate">
+    <h2>Enter Phone Number</h2>
+    <input id="phoneInput" placeholder="e.g. 7655808495">
+    <button id="phoneBtn">Submit</button>
+    <p id="phoneMsg"></p>
+  </div>
+  <div id="login" class="hidden">
+    <h2>Login</h2>
+    <div id="userSection">
+      <input id="userInput" placeholder="Username">
+    </div>
+    <div id="passSection">
+      <input id="passInput" type="password" placeholder="Password">
+    </div>
+    <button id="loginBtn">Login</button>
+    <p id="loginMsg"></p>
+  </div>
+  <div id="app" class="hidden">
+    <canvas id="gameCanvas" width="400" height="300"></canvas>
+    <div id="linkManager">
+      <input id="linkInput" placeholder="Add a URL…">
+      <button id="addLinkBtn">Add</button>
+      <ul id="linksList"></ul>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
